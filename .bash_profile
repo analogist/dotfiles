@@ -36,3 +36,6 @@ computestat ()
     awk '{ sum=sum+$1 ; sumX2+=(($1)^2)} END { avg=sum/NR; printf "Average: %f. Standard Deviation: %f \n", avg, sqrt(sumX2/(NR-1) - 2*avg*(sum/(NR-1)) + ((NR*(avg^2))/(NR-1))) }'
 }
 
+if [ -r "$HOME/.bashrc" ] && [ -f "$HOME/.bashrc" ]; then
+    source $HOME/.bashrc
+fi
