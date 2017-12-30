@@ -7,7 +7,6 @@ case "$OSTYPE" in
         export REPODIR="$HOME/Repos"
         ;;
     linux-gnu*)
-        alias serverfile='git --git-dir=$HOME/.serverfiles/ --work-tree=/'
         ;;
 esac
 
