@@ -1,15 +1,11 @@
 case "$OSTYPE" in
     darwin*)
-        PS1='\u@\h:\W\$ '
         export GPG_TTY=$(tty)
-        alias ls='ls -GFh'
-
         export REPODIR="$HOME/Repos"
         ;;
     linux-gnu*)
         ;;
     openbsd*)
-        alias vi='vim'
         ;;
 esac
 

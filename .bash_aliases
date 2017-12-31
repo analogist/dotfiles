@@ -1,3 +1,14 @@
+case "$OSTYPE" in
+    darwin*)
+        alias ls='ls -GFh'
+        ;;
+    linux-gnu*)
+        ;;
+    openbsd*)
+        alias vi='vim'
+        ;;
+esac
+
 alias grep='grep --color=auto'
 alias dotfile='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias mosh='mosh -p 60000:60020'
