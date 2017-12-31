@@ -9,7 +9,6 @@ case "$OSTYPE" in
         ;;
 esac
 
-alias grep='grep --color=auto'
 alias dotfile='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias mosh='mosh -p 60000:60020'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
