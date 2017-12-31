@@ -1,0 +1,5 @@
+[user]
+	name = James Wu
+[core]
+	excludesfile = ~/.gitignore
+	editor = vim
