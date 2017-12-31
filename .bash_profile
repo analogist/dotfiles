@@ -8,6 +8,9 @@ case "$OSTYPE" in
         ;;
     linux-gnu*)
         ;;
+    openbsd*)
+        alias vi='vim'
+        ;;
 esac
 
 alias grep='grep --color=auto'
