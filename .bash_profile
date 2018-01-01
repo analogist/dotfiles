@@ -6,6 +6,7 @@ case "$OSTYPE" in
     linux-gnu*)
         ;;
     openbsd*)
+        export PAGER='less'
         ;;
 esac
 
