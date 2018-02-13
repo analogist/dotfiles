@@ -2,8 +2,11 @@ case "$OSTYPE" in
     darwin*)
         export GPG_TTY=$(tty)
         export REPODIR="$HOME/Repos"
+        export GOPATH="$HOME/go"
+        export PATH=$PATH:/usr/local/opt/go/libexec/bin
         ;;
     linux-gnu*)
+        export GOPATH="$HOME/go"
         ;;
     openbsd*)
         export PAGER='less'
