@@ -1,6 +1,7 @@
 case "$OSTYPE" in
     darwin*)
         alias ls='ls -GFh'
+        alias ssh="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
         ;;
     linux-gnu*)
         ;;
