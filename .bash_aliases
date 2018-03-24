@@ -11,7 +11,7 @@ case "$OSTYPE" in
 esac
 
 alias dotfile='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias mosh='mosh -p 60000:60020'
+alias mosh='gpg-connect-agent updatestartuptty /bye >/dev/null; mosh -p 60000:60020'
 alias wanip='dig +short myip.opendns.com @resolver1.opendns.com'
 
 # analogist.net web items
