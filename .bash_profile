@@ -41,8 +41,7 @@ host ()
         return
     fi
     /usr/bin/host $1
-    echo -n "$1 is hosted by "
-    whois $(dig +short $1) | grep "Organization" | sed 's/^Organization: *//'
+    whois $(dig +short $1) | grep -e "Organization\|org.*name"
     echo -n "$1 DNS SOA is "
     dig +short $1 SOA | sed 's/[0-9 ]*$//'
 }
