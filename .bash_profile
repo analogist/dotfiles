@@ -12,6 +12,8 @@ case "$OSTYPE" in
         ;;
     linux-gnu*)
         export GOPATH="$HOME/go"
+        export PAGER="less"
+        export VISUAL="vi"
         ;;
     openbsd*)
         export PAGER='less'
