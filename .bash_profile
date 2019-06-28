@@ -12,6 +12,7 @@ case "$OSTYPE" in
         ;;
     linux-gnu*)
         export GOPATH="$HOME/go"
+        export PATH=$PATH:$GOPATH/bin
         export PAGER="less"
         export VISUAL="vi"
         ;;
@@ -33,6 +34,11 @@ gsmd5 ()
 computestat ()
 {
     awk '{ sum=sum+$1 ; sumX2+=(($1)^2)} END { avg=sum/NR; printf "Average: %f. Standard Deviation: %f \n", avg, sqrt(sumX2/(NR-1) - 2*avg*(sum/(NR-1)) + ((NR*(avg^2))/(NR-1))) }'
+}
+
+gittagsummary ()
+{
+    awk 'NR==1{last=$1} NR>1{print last".."$1; last=$1} END{print last"..HEAD"}' | xargs -t -I {} git diff --shortstat {}
 }
 
 host ()
