@@ -1,11 +1,5 @@
 case "$OSTYPE" in
     darwin*)
-        export GPG_TTY=$(tty)
-        export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-        if ! pgrep -x -u $USER "gpg-agent" >/dev/null 2>&1; then
-            gpg-connect-agent /bye >/dev/null 2>&1
-        fi
-        export GIT_SSH_COMMAND="gpg-connect-agent updatestartuptty /bye >/dev/null; ssh"
         export REPODIR="$HOME/Repos"
         export GOPATH="$HOME/go"
         export PATH=$PATH:/usr/local/opt/go/libexec/bin
