@@ -3,6 +3,21 @@ case "$OSTYPE" in
         export REPODIR="$HOME/Repos"
         export GOPATH="$HOME/go"
         export PATH=$PATH:/usr/local/opt/go/libexec/bin
+        mkramdisk ()
+        {
+            if [ "$#" -eq 1 ]
+            then
+                ramdisk_sectors=$(($1*2048))
+                ramdisk_dev=$(hdiutil attach -nomount ram://${ramdisk_sectors})
+                newfs_hfs ${ramdisk_dev}
+                mount_point=/tmp/ramdisk
+                mkdir -p ${mount_point}
+                mount -t hfs ${ramdisk_dev} ${mount_point}
+                cd ${mount_point}
+            else
+                echo "Usage: mkramdisk [size MB]"
+            fi
+        }
         ;;
     linux-gnu*)
         export GOPATH="$HOME/go"
