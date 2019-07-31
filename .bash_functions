@@ -19,6 +19,9 @@ case "$OSTYPE" in
         }
         ;;
     linux-gnu*)
+        if [ -f ~/.docker_functions ]; then
+            . ~/.docker_functions
+        fi
         ;;
     openbsd*)
         ;;
