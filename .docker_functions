@@ -1,0 +1,27 @@
+#!/bin/bash
+# del_stopped and other elements from https://github.com/jessfraz/dotfiles/
+
+export DOCKERPREFIX=analogist
+
+del_stopped () {
+	local name=$1
+	local state
+	state=$(docker inspect --format "{{.State.Running}}" "$name" 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm "$name"
+	fi
+}
+
+minisign () {
+    cwd="$(pwd)"
+    tmpmount="$(basename "$cwd")"
+    mkdir -p ${HOME}/.minisign
+
+    docker run -it --rm \
+        --name minisign \
+        -v "${cwd}:/tmp/${tmpmount}" \
+        -v "${HOME}/.minisign:/home/user/.minisign" \
+        --workdir "/tmp/${tmpmount}" \
+        ${DOCKERPREFIX}/minisign "$@"
+}

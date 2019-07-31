@@ -1,3 +1,5 @@
+#!/bin/bash
+
 case "$OSTYPE" in
     darwin*)
         mkramdisk ()
