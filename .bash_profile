@@ -15,6 +15,7 @@ case "$OSTYPE" in
 esac
 
 export GOPATH="$HOME/go"
+export GO111MODULE=on
 
 if [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ]; then
     source $HOME/.bashrc

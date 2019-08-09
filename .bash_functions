@@ -59,3 +59,14 @@ host ()
     echo -n "$1 DNS SOA is "
     dig +short $1 SOA | sed 's/[0-9 ]*$//'
 }
+
+binwatch ()
+{
+    if [ -z "$1" ]
+    then
+        bytecount=1024
+    else
+        bytecount=$1
+    fi
+    watch -n 1 "tail -c $bytecount "'$(ls -tr | tail -n 1) | xxd -c 32'
+}
