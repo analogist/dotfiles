@@ -20,3 +20,7 @@ export GO111MODULE=on
 if [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ]; then
     source $HOME/.bashrc
 fi
+
+if [ -f "$HOME/.envcreds" ]; then
+    source $HOME/.envcreds
+fi

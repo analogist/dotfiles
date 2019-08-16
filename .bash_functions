@@ -66,7 +66,24 @@ binwatch ()
     then
         bytecount=1024
     else
-        bytecount=$1
+        bytecount=$(($1))
     fi
     watch -n 1 "tail -c $bytecount "'$(ls -tr | tail -n 1) | xxd -c 32'
+}
+
+cdlast ()
+{
+    if [ -z "$1" ]
+    then
+        lastcount=1
+    else
+        lastcount=$(($1))
+    fi
+
+    if [ $lastcount -ge 1 ]
+    then
+        cd $(ls -tF | grep -E "/$" | awk "NR==$lastcount")
+    else
+        echo "Usage: cdlast [last # modified dir]"
+    fi
 }
