@@ -72,8 +72,9 @@ host ()
     if [ -z "$1" ]
     then
         echo "Usage: host [host]"
-        return
+        return 1
     fi
+
     /usr/bin/host $1
     whois $(dig +short $1) | grep -e "Organization\|org.*name"
     echo -n "$1 DNS SOA is "
@@ -82,28 +83,19 @@ host ()
 
 binwatch ()
 {
-    if [ -z "$1" ]
-    then
-        bytecount=1024
-    else
-        bytecount=$(($1))
-    fi
+    [ -z "$1" ] && bytecount=1024 || bytecount=$(($1))
     watch -n 1 "tail -c $bytecount "'$(ls -tr | tail -n 1) | xxd -c 32'
 }
 
 cdlast ()
 {
-    if [ -z "$1" ]
-    then
-        lastcount=1
-    else
-        lastcount=$(($1))
-    fi
+    [ -z "$1" ] && lastcount=1 || lastcount=$(($1))
 
     if [ $lastcount -ge 1 ]
     then
         cd $(ls -tF | grep -E "/$" | awk "NR==$lastcount")
     else
         echo "Usage: cdlast [last # modified dir]"
+        return 1
     fi
 }
