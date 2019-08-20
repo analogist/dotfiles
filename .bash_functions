@@ -22,6 +22,26 @@ case "$OSTYPE" in
         if [ -f ~/.docker_functions ]; then
             . ~/.docker_functions
         fi
+        goupgrade()
+        {
+            if [ "$#" -ne 1 ]
+            then
+                echo "goupgrade [version #]"
+                return 1
+            fi
+
+            gofilename="go${1}.linux-amd64.tar.gz"
+            gotmpdir=$(mktemp -d "/tmp/goupgrade.XXXXX")
+            pushd $gotmpdir
+            echo "Downloading $gofilename into $gotmpdir..."
+            curl -O "https://dl.google.com/go/$gofilename" && \
+                echo "Download success. Installing..." && \
+                sudo tar -C /usr/local -zxf "$gofilename"
+            popd
+            echo "Removing $gotmpdir..."
+            rm -r $gotmpdir
+            echo "goupgrade to version $1 done."
+        }
         ;;
     openbsd*)
         ;;
