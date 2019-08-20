@@ -37,9 +37,10 @@ case "$OSTYPE" in
             curl -O "https://dl.google.com/go/$gofilename" && \
                 echo "Download success. Installing..." && \
                 sudo tar -C /usr/local -zxf "$gofilename"
-            popd
             echo "Removing $gotmpdir..."
-            rm -r $gotmpdir
+            rm -v "$gofilename"
+            popd
+            rmdir -v $gotmpdir
             echo "goupgrade to version $1 done."
         }
         ;;
