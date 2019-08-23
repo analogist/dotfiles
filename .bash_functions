@@ -100,3 +100,26 @@ cdlast ()
         return 1
     fi
 }
+
+watchdir ()
+{
+    [ -z "$2" ] && interval=1 || interval=$(($2))
+
+    if [ "$#" -lt 1 ]
+    then
+        echo "Usage: watchdir 'cmd' [interval]"
+        return 1
+    fi
+
+    dirlastl=$(ls -l)
+    while true;
+    do
+        dirnowl=$(ls -l)
+        if [ -n "$(diff -q <(echo \"$dirlastl\") <(echo \"$dirnowl\"))" ]
+        then
+            eval $1
+            dirlastl=$dirnowl
+        fi
+        sleep 1
+    done
+}
