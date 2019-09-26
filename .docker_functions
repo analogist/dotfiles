@@ -25,3 +25,22 @@ minisign () {
         --workdir "/tmp/${tmpmount}" \
         ${DOCKERPREFIX}/minisign "$@"
 }
+
+daemon_cloudflare_ddns () {
+    docker run -d --restart always \
+        --name cloudflare-ddns \
+        -e PROVIDER=cloudflare \
+        -e CLOUDFLARE_APIKEY \
+        -e CLOUDFLARE_ZONE \
+        -e CLOUDFLARE_HOST \
+        -e CLOUDFLARE_EMAIL \
+        analogist/cloudflare-ddns -duration 2h
+}
+
+daemon_sshb0t () {
+    docker run -d --restart always \
+        --name sshb0t \
+        -v ${HOME}/.ssh/authorized_keys:/root/.ssh/authorized_keys \
+        r.j3ss.co/sshb0t --user analogist --keyfile /root/.ssh/authorized_keys \
+        --interval 2h
+}
