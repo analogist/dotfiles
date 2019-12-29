@@ -13,7 +13,7 @@ del_stopped () {
 	fi
 }
 
-minisign () {
+container_minisign () {
     cwd="$(pwd)"
     tmpmount="$(basename "$cwd")"
     mkdir -p ${HOME}/.minisign
