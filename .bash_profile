@@ -6,7 +6,7 @@ case "$OSTYPE" in
     linux-gnu*)
         export PAGER="less"
         export VISUAL="vi"
-        export PATH=$PATH:/usr/local/go/bin:/usr/local/age
+        export PATH=$PATH:/usr/local/go/bin
         sed 's/^\(\s*PKCS11Provider \/usr\/local\/lib\/opensc-pkcs11\.so\)/#\1/' $HOME/.ssh/configGitServers.template > $HOME/.ssh/configGitServers
         ;;
     openbsd*)
