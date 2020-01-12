@@ -68,6 +68,77 @@ gittagsummary ()
     awk 'NR==1{last=$1} NR>1{print last".."$1; last=$1} END{print last"..HEAD"}' | xargs -t -I {} git diff --shortstat {}
 }
 
+randint ()
+{
+    # Generate unbiased integers between arbitrary ranges using kernel cryptographic random
+
+    # check for invalid arguments
+    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]
+    then
+        echo "Usage: randint [MAXINT]"
+        echo "Usage: randint [MININT] [MAXINT]"
+        return 1
+    else
+        if [ "$#" -eq 2 ]
+        then
+            # two arguments: generate range [MININT, MAXINT] inclusive
+            if [ "$1" -lt "$2" ]
+            then
+                # generate: randint(0, target) + offset
+                target=$(( "$2" - "$1" ))
+                offset=$(($1))
+            else
+                # error: MININT >= MAXINT
+                echo "Usage: randint [MININT] [MAXINT]"
+                echo "MAXINT must be greater than MININT"
+                return 1
+            fi
+        else
+            # one argument: MAXINT; implies [0, MAXINT] inclusive
+            target=$(( "$1" ))
+            offset=0
+        fi
+    fi
+
+    if [ "$target" -lt 1 ] # catches errors such as one argument MAXINT <= 0
+    then
+        echo "Requested MAXINT - MININT less than 1"
+        return 1
+    fi
+
+    # get the smallest number of bits (rounded up) to encompass the range [0, target]
+    # round up log2(target) using printf rounding
+    # for example, randint [0, 100] requires targetbits = 7 to get [0, 128]
+
+    targetbits=$(printf "%.0f" $(echo "l(${target}) / l(2) + 0.50001" | bc -l))
+
+    # /dev/urandom only provides full bytes, round up to find the number of bytes to read
+    # for example, if targetbits = 7, read in randbytes = 1 (8 bits) and truncate 1 later
+
+    randbytes=$(( (targetbits+7)/8 ))
+
+    # After we read in full bytes, we can then truncate to targetbits using bitshift >>
+    # In this example, truncatebits = 1
+
+    truncatebits=$(( randbytes*8 - targetbits ))
+
+    while true
+    do
+        # read in hex bytes, convert hex to decimal with bash $(( 16#HEXNUMBER )) notation
+        # and bitshift to truncate bits to get a number within [0, 2^targetbits]
+
+        generatedint="$(( 16#$(head -c $randbytes /dev/urandom | xxd -p) >> truncatebits ))"
+
+        # check to see if it also happens to be within [0, target], if so, success!
+
+        [ "$generatedint" -le "$target" ] && break
+
+        # otherwise, try again
+    done
+
+    echo "$(( generatedint + offset ))"
+}
+
 host ()
 {
     if [ -z "$1" ]
