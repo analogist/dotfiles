@@ -34,7 +34,7 @@ daemon_cloudflare_ddns () {
         -e CLOUDFLARE_ZONE \
         -e CLOUDFLARE_HOST \
         -e CLOUDFLARE_EMAIL \
-        analogist/cloudflare-ddns -duration 2h
+        ${DOCKERPREFIX}/cloudflare-ddns -duration 2h
 }
 
 daemon_sshb0t () {
@@ -43,4 +43,14 @@ daemon_sshb0t () {
         -v ${HOME}/.ssh/authorized_keys:/root/.ssh/authorized_keys \
         r.j3ss.co/sshb0t --user analogist --keyfile /root/.ssh/authorized_keys \
         --interval 2h
+}
+
+get_twitter_followers () {
+    docker run -it --rm \
+        -e TWITTER_CONSUMER_KEY \
+        -e TWITTER_CONSUMER_SECRET \
+        -e TWITTER_ACCESS_KEY \
+        -e TWITTER_ACCESS_SECRET \
+        -e TWITTER_FETCH_HANDLE \
+        ${DOCKERPREFIX}/twitter-followers
 }
