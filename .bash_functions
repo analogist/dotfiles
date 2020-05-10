@@ -73,13 +73,13 @@ randint ()
     # Generate unbiased integers between arbitrary ranges using kernel cryptographic random
 
     # check for invalid arguments
-    if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]
+    if [ "$#" -lt 1 ] || [ "$#" -gt 3 ]
     then
         echo "Usage: randint [MAXINT]"
-        echo "Usage: randint [MININT] [MAXINT]"
+        echo "Usage: randint [MININT] [MAXINT] ([NUMROLLS])"
         return 1
     else
-        if [ "$#" -eq 2 ]
+        if [ "$#" -ge 2 ]
         then
             # two arguments: generate range [MININT, MAXINT] inclusive
             if [ "$1" -lt "$2" ]
@@ -93,10 +93,27 @@ randint ()
                 echo "MAXINT must be greater than MININT"
                 return 1
             fi
+
+            # check for numrolls
+            if [ "$#" -eq 3 ]
+            then
+                if [ "$3" -ge 1 ]
+                then
+                    numrolls=$(($3))
+                else
+                    # error: NUMROLLS < 1
+                    echo "Usage: randint [MININT] [MAXINT] [NUMROLLS]"
+                    echo "NUMROLLS must be greater than 0"
+                fi
+            else
+                # two arguments: implies numrolls of 1
+                numrolls=1
+            fi
         else
             # one argument: MAXINT; implies [0, MAXINT] inclusive
             target=$(( "$1" ))
             offset=0
+            numrolls=1
         fi
     fi
 
@@ -122,21 +139,24 @@ randint ()
 
     truncatebits=$(( randbytes*8 - targetbits ))
 
-    while true
+    for (( c=0; c<$numrolls; c++ ))
     do
-        # read in hex bytes, convert hex to decimal with bash $(( 16#HEXNUMBER )) notation
-        # and bitshift to truncate bits to get a number within [0, 2^targetbits]
+        while true
+        do
+            # read in hex bytes, convert hex to decimal with bash $(( 16#HEXNUMBER )) notation
+            # and bitshift to truncate bits to get a number within [0, 2^targetbits]
 
-        generatedint="$(( 16#$(head -c $randbytes /dev/urandom | xxd -p) >> truncatebits ))"
+            generatedint="$(( 16#$(head -c $randbytes /dev/urandom | xxd -p) >> truncatebits ))"
 
-        # check to see if it also happens to be within [0, target], if so, success!
+            # check to see if it also happens to be within [0, target], if so, success!
 
-        [ "$generatedint" -le "$target" ] && break
+            [ "$generatedint" -le "$target" ] && break
 
-        # otherwise, try again
+            # otherwise, try again
+        done
+
+        echo "$(( generatedint + offset ))"
     done
-
-    echo "$(( generatedint + offset ))"
 }
 
 host ()
