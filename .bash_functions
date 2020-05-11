@@ -68,6 +68,64 @@ gittagsummary ()
     awk 'NR==1{last=$1} NR>1{print last".."$1; last=$1} END{print last"..HEAD"}' | xargs -t -I {} git diff --shortstat {}
 }
 
+wh_attack ()
+{
+    if [ "$#" -lt 5 ] || [ "$#" -gt 6 ]
+    then
+        echo "wh_attack [attacks] [skill] [strength] [toughness] [saving]"
+        return 1
+    fi
+
+    verbose=0
+    if [ "$#" -eq 6 ] && [ "$6" = "-v" ]
+    then
+        verbose=1
+    fi
+
+    attacks=$(($1))
+    skill=$(($2))
+    strength=$(($3))
+    toughness=$(($4))
+    saving=$(($5))
+
+    if [ $(($strength)) -gt $(($toughness)) ]
+    then
+        if [ $(( "$strength"/"$toughness" )) -ge 2 ]
+        then
+            woundthrow=2
+        else
+            woundthrow=3
+        fi
+    elif [ $(($strength)) -lt $((toughness)) ]
+    then
+        if [ $(( "$toughness"/"$strength" )) -ge 2 ]
+        then
+            woundthrow=6
+        else
+            woundthrow=5
+        fi
+    else
+        woundthrow=4
+    fi
+
+    if [ "$verbose" -eq 0 ]
+    then
+        randint 1 6 $(randint 1 6 $(randint 1 6 $attacks | awk -v skill=$skill 'BEGIN{hit = 0} { if ($1 >= skill) hit++} END{ print hit }') | awk -v woundthrow=$woundthrow 'BEGIN{wound = 0} { if ($1 >= woundthrow) wound++} END{ print wound }') | awk -v saving=$saving 'BEGIN{unsaved = 0} { if ($1 < saving) unsaved++} END{ print unsaved }'
+    else
+        r_attacks=($(randint 1 6 $attacks))
+        for i in "${r_attacks[@]}"; do [ "$i" -ge $skill ] && r_hits+=($(randint 1 6)) || r_hits+=(0); done
+        for i in "${r_hits[@]}"; do [ "$i" -ge $woundthrow ] && r_wounds+=($(randint 1 6)) || r_wounds+=(0); done
+        for i in "${r_wounds[@]}"; do [ "$i" -gt 0 ] && [ "$i" -lt $saving ] && r_unsaved+=(1) || r_unsaved+=(0); done
+
+        echo -e "Attacks:\t${r_attacks[@]}"
+        echo -e "Hits:\t\t${r_hits[@]}"
+        echo -e "Saves:\t\t${r_wounds[@]}"
+        echo -e "Wounds:\t\t${r_unsaved[@]}"
+
+        unset r_attacks r_hits r_wounds r_unsaved
+    fi
+}
+
 randint ()
 {
     # Generate unbiased integers between arbitrary ranges using kernel cryptographic random
