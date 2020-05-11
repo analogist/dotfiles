@@ -168,7 +168,7 @@ host ()
     fi
 
     /usr/bin/host $1
-    whois $(dig +short $1) | grep -e "Organization\|org.*name"
+    whois $(dig +short $1 | head -n 1) | grep -e "Organization\|org.*name"
     echo -n "$1 DNS SOA is "
     dig +short $1 SOA | sed 's/[0-9 ]*$//'
 }
