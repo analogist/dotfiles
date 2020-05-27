@@ -76,10 +76,10 @@ wh_attack ()
         return 1
     fi
 
-    verbose=0
-    if [ "$#" -eq 6 ] && [ "$6" = "-v" ]
+    verbose=1
+    if [ "$#" -eq 6 ] && [ "$6" = "-q" ]
     then
-        verbose=1
+        verbose=0
     fi
 
     attacks=$(($1))
@@ -162,6 +162,7 @@ randint ()
                     # error: NUMROLLS < 1
                     echo "Usage: randint [MININT] [MAXINT] [NUMROLLS]"
                     echo "NUMROLLS must be greater than 0"
+                    return 1
                 fi
             else
                 # two arguments: implies numrolls of 1
