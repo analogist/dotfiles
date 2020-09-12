@@ -273,3 +273,33 @@ watchdir ()
         sleep 1
     done
 }
+
+flacbin ()
+{
+    [ -z "$1" -o ! -f "$1" ] && echo "Usage: flacbin [file.bin] [Sps]" && return 1
+
+    barename=$(basename $1 ".bin")
+
+    [ -z "$2" ] && fs=25000 || fs =$(($2))
+
+    tail -c +9 "$1" | flac -6 --force-raw-format --endian=little --sign=signed --channels=8 --bps=16 --sample-rate "$fs" - -o "${barename}.flac"
+    if [ -f "${barename}.flac" ]
+    then
+        head -c 8 "$1" >> "${barename}.flac"
+    else
+        echo "Error occurred"
+    fi
+}
+
+deflacbin ()
+{
+    [ -z "$1" -o ! -f "$1" ] && echo "Usage: deflacbin [file.flac]" && return 1
+
+    barename=$(basename $1 ".flac")
+
+    [ -f "${barename}.bin" ] && echo ".bin with that name already exist, not overwriting" && return 1
+
+    tail -c 8 "$1" > "${barename}.bin"
+    head -c -8 "$1" | flac -d --force-raw-format --endian=little --sign=signed "$1" -o - >> "${barename}.bin"
+}
+
