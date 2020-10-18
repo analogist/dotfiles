@@ -54,3 +54,8 @@ get_twitter_followers () {
         -e TWITTER_FETCH_HANDLE \
         ${DOCKERPREFIX}/twitter-followers
 }
+
+container_nethack () {
+    docker run -it --rm \
+        ${DOCKERPREFIX}/nethack -- "$@"
+}
