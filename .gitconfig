@@ -3,3 +3,5 @@
 [core]
 	excludesfile = ~/.gitignore
 	editor = vim
+[pull]
+	ff = only
