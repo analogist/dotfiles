@@ -15,4 +15,5 @@ alias wanip4='wanip -4'
 alias wanip6='wanip -6'
 
 # analogist.net web items
+alias exifstrip='exiftool -gps:all= -xmp:gps*= -lens*= -model='
 alias hugoclean='hugo --cleanDestinationDir'
