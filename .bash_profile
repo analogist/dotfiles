@@ -1,7 +1,9 @@
 case "$OSTYPE" in
     darwin*)
+        export PATH="/opt/homebrew/bin${PATH+:$PATH}"
+        export SSH_AUTH_SOCK="$HOME/.ssh/yubikey-agent.sock"
         export REPODIR="$HOME/Repos"
-        [ ! -f "$HOME/.ssh/configGitServers" ] && gsed 's/^\(\s*PKCS11Provider \/usr\/lib\/x86_64-linux-gnu\/opensc-pkcs11\.so\)/#\1/' $HOME/.ssh/configGitServers.template > $HOME/.ssh/configGitServers
+        [ ! -f "$HOME/.ssh/configGitServers" ] && gsed 's/^\(\s*PKCS11Provider .*$\)/#\1/' $HOME/.ssh/configGitServers.template > $HOME/.ssh/configGitServers
         ;;
     linux-gnu*)
         export PAGER="less"

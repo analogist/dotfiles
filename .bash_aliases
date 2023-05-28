@@ -14,6 +14,7 @@ alias wanip='dig +short o-o.myaddr.l.google.com @ns1.google.com TXT'
 alias wanip4='wanip -4'
 alias wanip6='wanip -6'
 alias clockrun='TZ="America/Los_Angeles" watch -n 0.1 date +"%T.%N"'
+alias unkey='killall -HUP yubikey-agent'
 
 # analogist.net web items
 alias exifstrip='exiftool -gps:all= -xmp:gps*= -lens*= -model='
